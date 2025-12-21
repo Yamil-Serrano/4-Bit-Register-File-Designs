@@ -184,3 +184,12 @@ Reflection: If I had bought the 74HC670 from the start:
 - The chip would have been a black box
 
 With $10 you could buy a fully functional chip. With $35, you bought deep understanding and hands-on experience.
+
+## License
+Licensed under the **Solderpad Hardware License v2.1**.  
+See the [LICENSE](LICENSE-HARDWARE) file for full terms.
+
+## Contact
+If you have any questions or suggestions, feel free to reach out:
+- **GitHub:** [Neowizen](https://github.com/Yamil-Serrano)
+
