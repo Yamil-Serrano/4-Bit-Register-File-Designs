@@ -78,6 +78,10 @@ shape instruction-level flexibility.
 * Only the selected register is enabled for writing
 * Write access is fully flexible across all registers
 
+### Breadboard Implementation
+![20251231_010020 1](https://github.com/user-attachments/assets/b7715e52-2d2b-4a2d-a1db-a241b94d9005)
+*Close-up of the wired implementation*
+
 ## Design Philosophy
 
 RB1574B prioritizes simplicity and hardware efficiency.
