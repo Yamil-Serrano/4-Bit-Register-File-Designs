@@ -54,8 +54,7 @@ complexity and control logic.
 ## Hardware Implementation
 
 ### Circuit Design
-
-<img width="6178" height="4630" alt="Main" src="https://github.com/user-attachments/assets/b122f54f-9ce8-4d05-9413-44a941efb2c1" />
+<img width="9157" height="5164" alt="Main" src="https://github.com/user-attachments/assets/ad19505a-777c-4d89-a089-8c271c9f4678" />
 *Complete circuit schematic designed in CircuitVerse*
 
 ## Architecture Details
@@ -129,8 +128,7 @@ especially in discrete IC designs.
 ## Hardware Implementation
 
 ### Circuit Design
-
-<img width="6516" height="4908" alt="Main_1" src="https://github.com/user-attachments/assets/7fae47a0-3860-42c4-972d-d7781ad67d49" />
+<img width="11855" height="9484" alt="Main_1" src="https://github.com/user-attachments/assets/f257d167-aa8a-4b4a-93ff-050bfb399a46" />
 *Complete circuit schematic designed in CircuitVerse*
 
 ## Architecture Details
