@@ -128,7 +128,7 @@ especially in discrete IC designs.
 ## Hardware Implementation
 
 ### Circuit Design
-<img width="11855" height="9484" alt="Main_1" src="https://github.com/user-attachments/assets/f257d167-aa8a-4b4a-93ff-050bfb399a46" />
+<img width="12785" height="9634" alt="Main_1" src="https://github.com/user-attachments/assets/81c38613-9e21-4086-b6f3-ce832298e00e" />
 *Complete circuit schematic designed in CircuitVerse*
 
 ## Architecture Details
@@ -146,7 +146,6 @@ extensive wiring and schematic complexity.
 
 ### Write Operation
 
-* Identical to RB1574B
 * Fully flexible write access
 * One register written per clock cycle
 
