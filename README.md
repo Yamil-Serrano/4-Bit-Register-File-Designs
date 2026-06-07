@@ -55,7 +55,6 @@ complexity and control logic.
 
 ### Circuit Design
 <img width="9157" height="5164" alt="Main" src="https://github.com/user-attachments/assets/ad19505a-777c-4d89-a089-8c271c9f4678" />
-*Complete circuit schematic designed in CircuitVerse*
 
 ## Architecture Details
 
@@ -79,7 +78,6 @@ shape instruction-level flexibility.
 
 ### Breadboard Implementation
 ![20251231_010020 1](https://github.com/user-attachments/assets/b7715e52-2d2b-4a2d-a1db-a241b94d9005)
-*Close-up of the wired implementation*
 
 ## Design Philosophy
 
@@ -97,75 +95,85 @@ constraints directly influence CPU behavior.
 
 # Full 4-Bit Register File (RB1534B – Complete Read Architecture)
 
-RB1534B represents a fully flexible register file
-implementation. Both read ports can independently
-access any register, enabling all possible register
-to-register operations in hardware. This completeness
-comes at the cost of increased multiplexing logic,
-dense wiring, and higher visual complexity,
-especially in discrete IC designs.
-
-## Technical Specifications
+RB1534B represents a fully flexible register file implementation. Both read ports can independently access any register, enabling all possible register-to-register operations in hardware. This completeness comes at the cost of increased multiplexing logic, dense wiring, and higher visual complexity, especially in discrete IC designs.
 
 ### Core Features
 
-* **Register Count**: 4 general-purpose registers
-* **Register Width**: 4-bit parallel storage
-* **Storage Type**: Edge-triggered D-type flip-flops
-* **Read Ports**: Two fully independent read outputs
-* **Write Port**: Single global RegWrite signal
-* **Clocked Write**: Yes
+- **Register Count**: 4 general-purpose registers
+- **Register Width**: 4-bit parallel storage
+- **Storage Type**: Edge-triggered D-type flip-flops
+- **Read Ports**: Two fully independent read outputs
+- **Write Port**: Single global RegWrite signal
+- **Clocked Write**: Yes
 
-## Integrated Circuits Used
+### Integrated Circuits Used
 
-| IC          | Function              | Quantity | Purpose                 |
-| ----------- | --------------------- | -------- | ----------------------- |
-| **74HC173** | 4-bit D-type Register | 4        | Register storage        |
-| **74HC153** | Dual 4:1 Multiplexer  | 4        | Full read selection     |
-| **74HC238** | 3-to-8 Decoder        | 1        | Register write decoding |
-| **74HC00**  | Quad NAND Gate        | 1        | RegWrite gating logic   |
+| IC | Function | Quantity | Purpose |
+| --- | --- | --- | --- |
+| **74HC173** | 4-bit D-type Register | 4 | Register storage |
+| **74HC153** | Dual 4:1 Multiplexer | 4 | Full read selection |
+| **74HC238** | 3-to-8 Decoder | 1 | Register write decoding |
+| **74HC00** | Quad NAND Gate | 1 | RegWrite gating logic |
+
+**Total Components**: 10 ICs, implementing a complete 4-bit register file with full read/write flexibility.
 
 ## Hardware Implementation
 
 ### Circuit Design
 <img width="12785" height="9634" alt="Main_1" src="https://github.com/user-attachments/assets/81c38613-9e21-4086-b6f3-ce832298e00e" />
-*Complete circuit schematic designed in CircuitVerse*
 
-## Architecture Details
+### PCB Design in KiCad
+<img width="1904" height="1001" alt="image" src="https://github.com/user-attachments/assets/e288c1da-1b31-4d9b-88a2-11accfb443d7" />
 
-### Read Operation
+After validating the architecture in simulation, the design was migrated from breadboard to a custom PCB manufactured via JLCPCB. Each IC is paired with a dedicated 100nF ceramic bypass capacitor placed directly at the power pins to suppress switching noise. A 100µF bulk electrolytic capacitor stabilizes the 5V supply rail.
 
-* RS1 can select Register 1 through Register 4
-* RS2 can select Register 1 through Register 4
-* All register combinations are supported
-* Both read ports operate simultaneously
+### Physical Build
+<img width="4000" height="1848" alt="20260607_163814 1" src="https://github.com/user-attachments/assets/7a961be7-e6b3-4e98-baff-18380e9e3273" />
 
-The explicit multiplexing structure makes all
-data paths visible and scalable, at the cost of
-extensive wiring and schematic complexity.
+## Verification & Test Bench
 
-### Write Operation
+To validate correct operation across all possible register file states, a dedicated test bench was developed using an ESP32 microcontroller. The [`firmware`](./src/tester/src) exhaustively tests all register read/write combinations. Due to I/O pin limitations on the ESP32, the two read ports (RS1 and RS2) could not be tested simultaneously. Instead, a sequential verification strategy was employed:
 
-* Fully flexible write access
-* One register written per clock cycle
+- **RS1 Validation**: First, all register read/write combinations were exhaustively tested using Read Port 1 (RS1). Every possible write pattern (0–15) was written to each of the 4 registers, and RS1 independently selected each register to verify output correctness.
+- **RS2 Validation**: After confirming 100% correct operation of RS1, the same test harness was reconfigured (pins reassigned) to validate Read Port 2 (RS2) identically.
+- **Write Verification**: Writes a unique 4-bit pattern (0–15) to each of the 4 registers across multiple cycles.
+- **Independence Test**: Verifies that writing to one register does not affect the contents of other registers.
+- **RegWrite Gating**: Ensures that when RegWrite is low, no register state changes occur.
+
+A total of 2,048 possible register file states (4 registers × 16 values × 16 read combinations for each port) were tested per read port, with both ports passing with 100% accuracy. Results are reported over Serial with ANSI color coding, distinguishing passing tests in green from failures in red. A 20×4 LCD display connected via I2C provides a real-time progress bar during testing and a summary screen upon completion.
+
+### Operation Details
+
+#### 1. **Register Write Operation**
+
+- Write address decoded via 74HC238 3-to-8 decoder
+- RegWrite signal gated with clock edge using 74HC00 NAND logic
+- Data applied to all 74HC173 registers, but only selected register accepts new value on clock edge
+
+#### 2. **Register Read Operation – Port 1 (RS1)**
+
+- 2× 74HC153 multiplexers select any of the 4 registers
+- 2-bit RS1 address selects which register appears on Read Data 1 bus
+
+#### 3. **Register Read Operation – Port 2 (RS2)**
+
+- Independent 2× 74HC153 multiplexer bank (separate from RS1)
+- 2-bit RS2 address selects any register for Read Data 2 bus
+- Both read ports operate simultaneously with zero contention
 
 ## Design Philosophy
 
-RB1534B prioritizes architectural completeness over
-hardware simplicity. Every register selection is
-explicitly decoded and multiplexed, making this
-design ideal for studying scalable CPU register
-files and data-path construction.
+RB1534B prioritizes architectural completeness over hardware simplicity. Every register selection is explicitly decoded and multiplexed, making this design ideal for studying scalable CPU register files and data-path construction.
 
 ## Comparative Summary
 
-| Feature           | RB1574B       | RB1534B      |
-| ----------------- | ------------- | ------------ |
-| Read Flexibility  | Limited (2×2) | Full (4×4)   |
-| Write Flexibility | Full          | Full         |
-| Chip Count        | Low           | High         |
-| Wiring Density    | Low           | Very High    |
-| Educational Focus | Constraints   | Completeness |
+| Feature | RB1574B | RB1534B |
+| --- | --- | --- |
+| Read Flexibility | Limited (2×2) | Full (4×4) |
+| Write Flexibility | Full | Full |
+| Chip Count | Low | High |
+| Wiring Density | Low | Very High |
+| Educational Focus | Constraints | Completeness |
 
 # FPGA Implementation: 4-Bit Register File (Tang Nano 9K)
 
