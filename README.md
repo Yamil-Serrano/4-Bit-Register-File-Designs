@@ -54,7 +54,7 @@ complexity and control logic.
 ## Hardware Implementation
 
 ### Circuit Design
-<img width="9157" height="5164" alt="Main" src="https://github.com/user-attachments/assets/ad19505a-777c-4d89-a089-8c271c9f4678" />
+<img width="8731" height="6233" alt="Main" src="https://github.com/user-attachments/assets/f3c96d11-8675-4043-873f-3e768a9c70b2" />
 
 ## Architecture Details
 
